@@ -246,7 +246,7 @@ with tab1:
                 time_usuario   = row[2]
                 time_adv  = row[3]
                 gols_usuario   = row[19]
-                gols_adv   = row[31]
+                gols_adv   = row[30]
                 competicao = row[5]
                 temporada   = row[6]
                 return f"{time_usuario} {gols_usuario}x{gols_adv} {time_adv} - {competicao} {temporada}"
