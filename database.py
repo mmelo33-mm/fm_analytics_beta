@@ -54,16 +54,27 @@ def buscar_partidas(usuario_id=None):
     conn = conectar()
     cursor = conn.cursor()
 
+    COLUNAS = """
+        id, usuario_id, time_usuario, time_adv, local, competicao, temporada, data, rodada,
+        posse_usuario, remates_usuario, remates_a_baliza_usuario, xg_usuario,
+        oportunidades_flagrantes_usuario, cantos_usuario, passes_totais_usuario,
+        passes_certos_usuario, cruzamentos_totais_usuario, cruzamentos_certos_usuario,
+        gols_usuario, posse_adv, remates_adv, remates_a_baliza_adv, xg_adv,
+        oportunidades_flagrantes_adv, cantos_adv, passes_totais_adv,
+        passes_certos_adv, cruzamentos_totais_adv, cruzamentos_certos_adv,
+        gols_adv, resultado
+    """
+
     try:
         if usuario_id:
-            cursor.execute("""
-                SELECT * FROM partidas
+            cursor.execute(f"""
+                SELECT {COLUNAS} FROM partidas
                 WHERE usuario_id = %s
                 ORDER BY data DESC
             """, (usuario_id,))
         else:
-            cursor.execute("""
-                SELECT * FROM partidas
+            cursor.execute(f"""
+                SELECT {COLUNAS} FROM partidas
                 ORDER BY data DESC
             """)
 
@@ -113,7 +124,18 @@ def buscar_partidas_filtradas(usuario_id, temporada=None, competicao=None):
     conn = conectar()
     cursor = conn.cursor()
 
-    query = "SELECT * FROM partidas WHERE usuario_id = %s"
+    COLUNAS = """
+        id, usuario_id, time_usuario, time_adv, local, competicao, temporada, data, rodada,
+        posse_usuario, remates_usuario, remates_a_baliza_usuario, xg_usuario,
+        oportunidades_flagrantes_usuario, cantos_usuario, passes_totais_usuario,
+        passes_certos_usuario, cruzamentos_totais_usuario, cruzamentos_certos_usuario,
+        gols_usuario, posse_adv, remates_adv, remates_a_baliza_adv, xg_adv,
+        oportunidades_flagrantes_adv, cantos_adv, passes_totais_adv,
+        passes_certos_adv, cruzamentos_totais_adv, cruzamentos_certos_adv,
+        gols_adv, resultado
+    """
+
+    query = f"SELECT {COLUNAS} FROM partidas WHERE usuario_id = %s"
     params = [usuario_id]
 
     if temporada:
