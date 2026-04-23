@@ -727,9 +727,18 @@ with tab2:
             perc_passes_med =("perc_passes", "mean"),
         ).reset_index()
  
-        min_safe = df_agg["minutos_total"].replace(0, pd.NA)
-        df_agg["golos_90"]  = (df_agg["golos"]  / min_safe * 90).round(2)
-        df_agg["xg_90"]     = (df_agg["xg_total"]/ min_safe * 90).round(2)
+        cols_numericas = [
+            "minutos_total", "golos", "assistencias", "xg_total",
+            "xa_total", "dist_total", "intercepcoes", "faltas_cometidas",
+            "faltas_sofridas", "passes_prog", "passes_dec", "fintas",
+            "perc_passes_med",
+        ]
+        for col in cols_numericas:
+            df_agg[col] = pd.to_numeric(df_agg[col], errors="coerce").fillna(0)
+
+        min_safe = df_agg["minutos_total"].replace(0, float("nan"))
+        df_agg["golos_90"]  = (df_agg["golos"]   / min_safe * 90).round(2)
+        df_agg["xg_90"]     = (df_agg["xg_total"] / min_safe * 90).round(2)
         df_agg["contrib_90"]= ((df_agg["golos"] + df_agg["assistencias"]) / min_safe * 90).round(2)
         df_agg["dist_90"]   = (df_agg["dist_total"] / min_safe * 90).round(2)
         df_agg = df_agg.sort_values("minutos_total", ascending=False)
