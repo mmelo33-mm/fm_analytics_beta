@@ -244,11 +244,11 @@ with tab1:
             # row: (id, usuario_id, time_usuario, time_adv, local, competicao, temporada, data, rodada, ...)
             try:
                 data_str = str(row[7])[:10]
-                time_u   = row[2]
-                time_a   = row[3]
-                gols_u   = row[18]
-                gols_a   = row[30]
-                return f"{data_str} — {time_u} {gols_u}x{gols_a} {time_a}"
+                time_usuario   = row[2]
+                time_adv  = row[3]
+                gols_usuario   = row[18]
+                gols_adv   = row[30]
+                return f"{data_str} — {time_usuario} {gols_usuario}x{gols_adv} {time_adv}"
             except Exception:
                 return f"Partida #{row[0]}"
 
