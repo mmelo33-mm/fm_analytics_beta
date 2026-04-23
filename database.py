@@ -275,6 +275,45 @@ def buscar_estatisticas_jogadores(partida_id: int, usuario_id: int) -> list:
     finally:
         conn.close()
 
+def buscar_todas_estatisticas_jogadores(usuario_id: int) -> list:
+    """
+    Retorna as estatísticas de jogadores de TODAS as partidas de um usuário.
+
+    Returns:
+        list[dict]: Lista de dicts com todos os campos + partida_id,
+                    ordenada por partida_id e minutos (desc).
+                    Retorna lista vazia se não houver registros.
+    """
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT
+                partida_id,
+                numero, nome, minutos_jogados,
+                distancia_km, perc_passes, xa, assistencias, xg, golos,
+                perc_cruzamentos, passes_progressivos, oportunidades_flagrantes, passes_decisivos,
+                perc_remates, fintas, faltas_sofridas, remate_na_barra,
+                perc_desarmes, perc_cabeceamentos, faltas_cometidas, intercepcoes, alivios, desarmes_decisivos,
+                defesas_seguras, defesas_ponta_dedos, defesas_desviadas, remates_sofridos,
+                lancamentos, cantos, livres_defensivos, livres_ofensivos
+            FROM estatisticas_jogadores
+            WHERE usuario_id = %s
+            ORDER BY partida_id DESC, minutos_jogados DESC NULLS LAST, nome ASC
+        """, (usuario_id,))
+
+        colunas = [desc[0] for desc in cursor.description]
+        return [dict(zip(colunas, row)) for row in cursor.fetchall()]
+
+    except Exception as e:
+        print(f"Erro ao buscar todas as estatísticas de jogadores: {e}")
+        return []
+
+    finally:
+        conn.close()
+
+
 def contar_partidas_usuario(usuario_id):
     conn = conectar()
     cursor = conn.cursor()
