@@ -945,61 +945,6 @@ with tab3:
         else:
             st.error(t("deletar_erro", lang))
 
-
-# =======================
-# TAB 4: ASSISTENTE IA
-# =======================
-client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
-
-with tab4:
-    st.subheader(t("tab_ia", lang))
-    
-    # Recuperamos o DF filtrado que foi salvo na Tab 2
-    if 'df_para_ia' in st.session_state and not st.session_state.df_para_ia.empty:
-        df_ia = st.session_state.df_para_ia
-        
-        st.write(f"📋 {t('total_partidas', lang)}: {len(df_ia)}")
-        
-        # Botão de Ação
-        if st.button(t("ia_analisar", lang), type="primary", use_container_width=True):
-            
-            # 1. Seleção de colunas críticas para não poluir o contexto
-            colunas_vaitais = [
-                'time_adv', 'local', 'resultado', 'gols_usuario', 'gols_adv',
-                'xg_usuario', 'xg_adv', 'posse_usuario', 'remates_usuario',
-                'remates_a_baliza_usuario', 'oportunidades_flagrantes_usuario',
-                'passes_certos_usuario', 'passes_totais_usuario'
-            ]
-            
-            # Adicionamos notas_treinador se você já tiver criado a coluna no banco
-            if 'notas_treinador' in df_ia.columns:
-                colunas_vaitais.append('notas_treinador')
-            
-            dados_contexto = df_ia[colunas_vaitais].to_csv(index=False)
-            
-            # 2. Chamada da IA
-            with st.spinner("🧠 " + t("ia_processando", lang)):
-                try:
-                    # Injetamos o idioma dinamicamente
-                    lang_instruction = f"\n\nIMPORTANT: Respond strictly in {st.session_state.idioma}."
-                    
-                    # ✅ Novo
-                    response = client.models.generate_content(
-                        model="gemini-2.0-flash",
-                        contents=PROMPT_ASSISTENTE + lang_instruction + "\n\n" + dados_contexto
-                    )
-
-                    
-                    st.divider()
-                    st.markdown(f"### {t['ia_veredito']}")
-                    st.markdown(response.text)
-                    
-                except Exception as e:
-                    st.error(f"Error: {e}")
-    else:
-        st.warning("⚠️ " + t("msg_sem_dados_ia", lang))
-
-
 # =======================
 # FOOTER
 # =======================

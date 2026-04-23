@@ -1,8 +1,3 @@
-"""
-Funções auxiliares para cálculos e análises do FM Analytics
-VERSÃO CORRIGIDA - Aceita usuario_id
-"""
-
 import pandas as pd
 
 # =======================
@@ -477,13 +472,3 @@ def parsear_html_fm(conteudo_html: bytes) -> list[dict]:
     # Filtra jogadores sem minutos jogados (convocados que não entraram)
     resultado = [j for j in jogadores.values() if j.get("minutos_jogados") is not None]
     return resultado
-
-
-PROMPT_ASSISTENTE = """
-Você é um Auxiliar Técnico de elite, especialista em Football Manager e análise de dados (Moneyball).
-Seu objetivo é analisar o DataFrame de partidas fornecido e identificar:
-1. "O Nó Tático": Situações onde a posse de bola não reflete em xG (posse inútil).
-2. "O Vilão do Jogo": Jogadores ou setores que falharam com base nas médias de finalização.
-3. "Aposta para o Futuro": Sugestão de mudança de mentalidade ou instrução tática.
-Seja direto, use gírias de futebol e foque em como ganhar o próximo jogo.
-"""
