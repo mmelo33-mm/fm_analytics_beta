@@ -223,7 +223,7 @@ with tab1:
 
 
     # =======================
-    # IMPORTAÇÃO HTML BEPINEX
+    # IMPORTAÇÃO HTML 
     # =======================
     st.divider()
     st.subheader(t("importar_titulo", lang))
@@ -352,7 +352,7 @@ with tab1:
                             st.success(
                                 t("importar_sucesso", lang).format(n=len(jogadores_importados))
                             )
-                            st.balloons()
+                            
                         else:
                             st.error(t("importar_erro_salvar", lang))
 
@@ -700,9 +700,48 @@ with tab2:
         height=260, margin=dict(t=40, b=40)
     )
     st.plotly_chart(fig_aprov, use_container_width=True)
+
+
+     # ════════════════════════════════════════════════════════════════════
+    # SEÇÃO 6 — PADRÃO EUROPEU
+    # ════════════════════════════════════════════════════════════════════
+    st.divider()
+    st.markdown("## 🌍 Comparativo — Padrão Europeu")
+ 
+    metricas_bench = {
+        "xg_usuario":              (t("xg_por_jogo", lang),       df_filtrado["xg_usuario"].mean(), "maior"),
+        "gols_usuario":            (t("gols_por_jogo", lang),      df_filtrado["gols_usuario"].mean(), "maior"),
+        "remates_usuario":         (t("remates_por_jogo", lang),   df_filtrado["remates_usuario"].mean(), "maior"),
+        "remates_a_baliza_usuario":(t("remates_alvo_label", lang), df_filtrado["remates_a_baliza_usuario"].mean(), "maior"),
+        "posse_usuario":           (t("posse_media_label", lang),  df_filtrado["posse_usuario"].mean(), "maior"),
+        "passes_certos_usuario":   (t("passes_certos_label", lang),df_filtrado["passes_certos_usuario"].mean(), "maior"),
+        "aproveitamento":          (t("aproveitamento_label", lang),aproveitamento_geral, "maior"),
+    }
+ 
+    linhas_bench = []
+    for chave, (label, meu_valor, regra) in metricas_bench.items():
+        bm = BENCHMARK[chave]
+        emoji, status, cor, intervalo = comparar_com_benchmark(meu_valor, bm, regra)
+        linhas_bench.append({
+            "Métrica": label,
+            "Seu valor": round(meu_valor, 2),
+            "Ref. europeia": intervalo,
+            "Status": f"{emoji} {status}"
+        })
+    st.dataframe(pd.DataFrame(linhas_bench), use_container_width=True, hide_index=True)
+ 
+    score = calcular_score_benchmark(df_filtrado, aproveitamento_geral)
+    tipo_msg, msg = diagnostico_geral(score)
+    if tipo_msg == "success":
+        st.success(f"🎯 {msg}")
+    elif tipo_msg == "warning":
+        st.warning(f"⚠️ {msg}")
+    else:
+        st.error(f"📉 {msg}")
+
  
     # ════════════════════════════════════════════════════════════════════
-    # SEÇÃO 6 — ANÁLISE DE JOGADORES (só aparece se tiver dados)
+    # SEÇÃO 7 — ANÁLISE DE JOGADORES (só aparece se tiver dados)
     # ════════════════════════════════════════════════════════════════════
     if tem_jogadores:
         st.divider()
@@ -746,8 +785,8 @@ with tab2:
         tab_art, tab_rank, tab_vol, tab_criacao = st.tabs([
             "🥇 Artilheiros & Assistentes",
             "📊 Ranking Completo",
-            "🏃 Volume & Físico",
-            "🎯 Criação de Jogo"
+            "🏃 Físico",
+            "🎯 Criação"
         ])
  
         with tab_art:
@@ -865,42 +904,7 @@ with tab2:
                     fig_pd.update_layout(height=260, margin=dict(t=40, b=60))
                     st.plotly_chart(fig_pd, use_container_width=True)
  
-    # ════════════════════════════════════════════════════════════════════
-    # SEÇÃO 7 — PADRÃO EUROPEU
-    # ════════════════════════════════════════════════════════════════════
-    st.divider()
-    st.markdown("## 🌍 Comparativo — Padrão Europeu")
- 
-    metricas_bench = {
-        "xg_usuario":              (t("xg_por_jogo", lang),       df_filtrado["xg_usuario"].mean(), "maior"),
-        "gols_usuario":            (t("gols_por_jogo", lang),      df_filtrado["gols_usuario"].mean(), "maior"),
-        "remates_usuario":         (t("remates_por_jogo", lang),   df_filtrado["remates_usuario"].mean(), "maior"),
-        "remates_a_baliza_usuario":(t("remates_alvo_label", lang), df_filtrado["remates_a_baliza_usuario"].mean(), "maior"),
-        "posse_usuario":           (t("posse_media_label", lang),  df_filtrado["posse_usuario"].mean(), "maior"),
-        "passes_certos_usuario":   (t("passes_certos_label", lang),df_filtrado["passes_certos_usuario"].mean(), "maior"),
-        "aproveitamento":          (t("aproveitamento_label", lang),aproveitamento_geral, "maior"),
-    }
- 
-    linhas_bench = []
-    for chave, (label, meu_valor, regra) in metricas_bench.items():
-        bm = BENCHMARK[chave]
-        emoji, status, cor, intervalo = comparar_com_benchmark(meu_valor, bm, regra)
-        linhas_bench.append({
-            "Métrica": label,
-            "Seu valor": round(meu_valor, 2),
-            "Ref. europeia": intervalo,
-            "Status": f"{emoji} {status}"
-        })
-    st.dataframe(pd.DataFrame(linhas_bench), use_container_width=True, hide_index=True)
- 
-    score = calcular_score_benchmark(df_filtrado, aproveitamento_geral)
-    tipo_msg, msg = diagnostico_geral(score)
-    if tipo_msg == "success":
-        st.success(f"🎯 {msg}")
-    elif tipo_msg == "warning":
-        st.warning(f"⚠️ {msg}")
-    else:
-        st.error(f"📉 {msg}")
+   
 
 
 # =======================
