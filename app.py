@@ -243,13 +243,13 @@ with tab1:
         def _label_partida(row):
             # row: (id, usuario_id, time_usuario, time_adv, local, competicao, temporada, data, rodada, ...)
             try:
-                id = row[0]
-                data_str = str(row[7])[:10]
                 time_usuario   = row[2]
                 time_adv  = row[3]
-                gols_usuario   = row[18]
-                gols_adv   = row[30]
-                return f"{id} — {data_str} — {time_usuario} {gols_usuario}x{gols_adv} {time_adv}"
+                gols_usuario   = row[19]
+                gols_adv   = row[31]
+                competicao = row[5]
+                temporada   = row[6]
+                return f"{time_usuario} {gols_usuario}x{gols_adv} {time_adv} - {competicao} {temporada}"
             except Exception:
                 return f"Partida #{row[0]}"
 
