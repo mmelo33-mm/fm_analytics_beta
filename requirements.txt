@@ -4,3 +4,4 @@ plotly==5.18.0
 psycopg2-binary
 google-genai
 beautifulsoup4
+statsmodels
