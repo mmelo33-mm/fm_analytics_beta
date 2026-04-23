@@ -1,10 +1,12 @@
 Versão de Testes
 
-1 - Leitura do HTML
+1 - Leitura do HTML - ok
 
-2 - Dados dos jogadores 
+2 - Dados dos jogadores - ok
 
-3 - Editar partidas
+3 - Remodelar o dashboard - ok
 
-4 - Adicionar mais dados ao dashboard
+4 - Remover o painel da IA
 
+
+Objetivo principal: inserção automática dos dados
