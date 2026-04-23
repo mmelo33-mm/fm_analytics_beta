@@ -18,7 +18,6 @@ from utils import (
 from licencas import Licenca, PLANOS, get_mensagem_upgrade, comparar_planos
 from auth import buscar_usuario
 from lang import STRINGS, IDIOMAS, t
-from utils import PROMPT_ASSISTENTE
 
 # =======================
 # CONFIGURAÇÃO PÁGINA
@@ -92,11 +91,10 @@ with col_idioma:
 # =======================
 # TABS PRINCIPAIS
 # =======================
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3 = st.tabs([
     t("tab_cadastro", lang),
     t("tab_dashboard", lang),
     t("tab_historico", lang),
-    t("tab_ia", lang),
 ])
 
 # =======================
