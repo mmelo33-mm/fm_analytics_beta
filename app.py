@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 import time
 import json
 import requests
-from google import genai
 from datetime import datetime, timedelta
 from database import inserir_partida, buscar_partidas, deletar_partida, inserir_estatisticas_jogadores, buscar_estatisticas_jogadores, buscar_todas_estatisticas_jogadores
 from utils import (
